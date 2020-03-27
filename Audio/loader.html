@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>WebAssembly Sample: Audio</title>
+</head>
+<body style="background:#CCCCCC">
+	<h1 style="text-align:center">WebAssembly Sample: Audio</h1>
+	<hr style="border:0;border-bottom:1px dashed gray;margin:10px 0">
+	<div id="wa_log">Loading...<br></div>
+	<script type="text/javascript">
+	var WA =
+	{
+		module: 'output.wasm',
+		print: function(text)
+		{
+			document.getElementById('wa_log').innerHTML += text.replace(/\n/g, "<br>");
+		},
+		error: function(code, msg)
+		{
+			document.getElementById('wa_log').innerHTML += '<div style="text-align:center;background-color:#FFF;color:#000;padding:1.5em;width:540px;margin:2em auto">' + {
+					BOOT: 'Error during startup. Your browser might not support WebAssembly. Please update it to the latest version.',
+					CRASH: 'The program crashed.',
+					MEM: 'The program ran out of memory.',
+				}[code] + '<br><br>(' + msg + ')</div>';
+		},
+		started: function()
+		{
+			WA.print('Playing 220 HZ sine wave\n');
+			WA.print('This document might need to be clicked to actually start audio output\n');
+		},
+	};
+	</script>
+	<script type="text/javascript" src="loader.js"></script>
+	<script type="text/javascript" src="../showsource.js" data-source="main.cpp"></script>
+</body>
+</html>

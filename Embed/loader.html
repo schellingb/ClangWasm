@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>{{PROJECT}}</title>
+</head>
+<body style="background:#CCCCCC">
+	<h1 style="text-align:center">{{PROJECT}}</h1>
+	<h2 id="wa_status" style="text-align:center">Status: Loading...</h2>
+	<canvas id="wa_canvas" style="display:block;margin:0 auto 10px" oncontextmenu="event.preventDefault()" width="0" height="0"></canvas>
+	<div id="wa_log"></div>
+	<script type="text/javascript">
+	var WA =
+	{
+		canvas: document.getElementById('wa_canvas'),
+		print: function(text)
+		{
+			document.getElementById('wa_log').innerHTML += text.replace(/\n/g, "<br>");
+		},
+		error: function(code, msg)
+		{
+			document.getElementById('wa_status').innerHTML = '<div style="text-align:center;background-color:#FFF;color:#000;padding:1.5em;width:540px;margin:2em auto">' + {
+					BOOT: 'Error during startup. Your browser might not support WebAssembly. Please update it to the latest version.',
+					WEBGL: 'Your browser or graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br>Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.',
+					CRASH: 'The program crashed.',
+					MEM: 'The program ran out of memory.',
+				}[code] + '<br><br>(' + msg + ')</div>';
+			WA.canvas.style.display = 'none';
+		},
+		started: function()
+		{
+			document.getElementById('wa_status').innerHTML = '';
+			WA.print('Finished main\n');
+		},
+	};
+	</script>
+	{{SCRIPT}}
+	<script type="text/javascript" src="../showsource.js" data-source="main.cpp"></script>
+</body>
+</html>
