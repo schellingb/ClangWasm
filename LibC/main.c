@@ -30,8 +30,34 @@ For more information, please refer to <http://unlicense.org/>
 #include <math.h>
 #include <malloc.h>
 
+//#define EM_JS(RETT, FNAME, PARAM, CODE) \
+//	extern RETT FNAME PARAM; \
+//	const char* __src__##FNAME __attribute__((used))  = #CODE;
+
+#define EM_JS(ret, name, params, ...)          \
+  extern ret name params;                      \
+  __attribute__((used, visibility("default"), export_name("JS|" #name "|" #params "|" #__VA_ARGS__))) \
+  void __em_js__##name() {}
+//  const char* __em_js__##name() {              \
+//    /*return #params "<::>" #__VA_ARGS__;*/        \
+//  }                                            
+
+
+EM_JS(void, call_alert, (void), {
+  alert('hello world 2!');
+  Module = {};
+});
+
+EM_JS(void, console_log, (const char* str), {
+		document.getElementById('wa_log').innerHTML += WA.ReadHeapString(str).replace(/\n/g, "<br>");
+});
+
 int main(int argc, char *argv[])
 {
+	console_log("CONSOLE LOG MAN\n");
+	call_alert();
+	//printf("%s\n", __src__call_alert);
+
 	printf("Hello printf World\n\n");
 
 	printf("sinf(1.0f): %f\n\n", sinf(1.0f));
