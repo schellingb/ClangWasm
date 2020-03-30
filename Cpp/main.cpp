@@ -32,8 +32,6 @@ For more information, please refer to <http://unlicense.org/>
 
 int main(int argc, char *argv[])
 {
-	std::cout << "main function\n";
-
 	std::string string = "Hello C++";
 	string += " World";
 	printf("%s\n\n", string.c_str());
