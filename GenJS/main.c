@@ -37,9 +37,7 @@ For more information, please refer to <http://unlicense.org/>
 #define WA_EXPORT(name) __attribute__((used, visibility("default"), export_name(name)))
 
 // Macro to generate a JavaScript function that can be called from C
-#define WA_JS(ret, name, args, ...) \
-  WA_EXTERN ret name args; \
-  WA_EXPORT("JS|" #name "|" #args "|" #__VA_ARGS__) void __wa_js__##name() {}
+#define WA_JS(ret, name, args, ...) WA_EXTERN __attribute__((import_module("JS"), import_name(#name "|" #args "|" #__VA_ARGS__))) ret name args;
 
 // Create a JavaScript function that writes to the wa_log div
 WA_JS(void, direct_print, (const char* pstr),
@@ -63,6 +61,12 @@ WA_JS(void, call_add, (void),
 WA_JS(int, get_document_location, (const char* pstr, int len),
 {
 	return WA.WriteHeapString(document.location.href, pstr, len)
+});
+
+// An unused JavaScript function which doesn't get included in the .wasm binary
+WA_JS(void, unused_wa_js_func, (),
+{
+	WA.print('This text does not even get included in the .wasm file\n');
 });
 
 int main(int argc, char *argv[])
