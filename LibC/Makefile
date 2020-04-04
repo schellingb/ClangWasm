@@ -106,7 +106,6 @@ $(OUTDIR)/output.wasm : Makefile $(OBJS) System.bc
 	$(info Linking $@ ...)
 	@$(LD) $(LDFLAGS) -o $@ $(OBJS) System.bc
 	@"$(WASMOPT)" --legalize-js-interface $(WOPTFLAGS) $@ -o $@
-	D:\dev\wasm\wabt\wasm-objdump.exe -dhxs $@ >$@.objdump
 
 $(OUTDIR)/loader.js : loader.js
 	$(info Copying $^ to $@ ...)
