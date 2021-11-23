@@ -82,7 +82,7 @@ function ReadHeapString(ptr, length)
 	}
 	// split up into chunks, because .apply on a huge string can overflow the stack
 	for (var ret = '', curr; length > 0; ptr += 1024, length -= 1024)
-		ret += String.fromCharCode.apply(String, HEAPU8.subarray(ptr, ptr + Math.min(length, 1024)));
+		ret += String.fromCharCode.apply(String, HEAPU8.slice(ptr, ptr + Math.min(length, 1024)));
 	return ret;
 }
 
@@ -267,10 +267,10 @@ function GL_WASM_IMPORTS(env)
 	env.glBufferData = function(target, size, data, usage)
 	{
 		if (!data) GLctx.bufferData(target, size, usage);
-		else GLctx.bufferData(target, HEAPU8.subarray(data, data+size), usage);
+		else GLctx.bufferData(target, HEAPU8.slice(data, data+size), usage);
 	};
 
-	env.glBufferSubData = function(target, offset, size, data) { GLctx.bufferSubData(target, offset, HEAPU8.subarray(data, data+size)); };
+	env.glBufferSubData = function(target, offset, size, data) { GLctx.bufferSubData(target, offset, HEAPU8.slice(data, data+size)); };
 	env.glClear = function(x0) { GLctx.clear(x0); };
 	env.glClearColor = function(x0, x1, x2, x3) { GLctx.clearColor(x0, x1, x2, x3); };
 	env.glColorMask = function(red, green, blue, alpha) { GLctx.colorMask(!!red, !!green, !!blue, !!alpha); };
@@ -822,7 +822,7 @@ function GL_WASM_IMPORTS(env)
 				view[i] = HEAPF32[ptr+i];
 			}
 		}
-		else view = HEAPF32.subarray((value)>>2,(value+count*12)>>2);
+		else view = HEAPF32.slice((value)>>2,(value+count*12)>>2);
 		GLctx.uniform3fv(GLuniforms[loc], view);
 	};
 
@@ -844,7 +844,7 @@ function GL_WASM_IMPORTS(env)
 				view[i+3] = HEAPF32[ptr+i+3];
 			}
 		}
-		else view = HEAPF32.subarray((value)>>2,(value+count*4)>>2);
+		else view = HEAPF32.slice((value)>>2,(value+count*4)>>2);
 		GLctx.uniformMatrix4fv(GLuniforms[loc], !!transpose, view);
 	};
 
